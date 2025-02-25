@@ -3,6 +3,8 @@ import App from "./App";
 import ProductList from "./page/ProductList";
 import Main from "./page/Main";
 import Error from "./page/Error";
+import Signup from "./page/Auth/Signup";
+import Login from "./page/Auth/Login";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,14 @@ const router = createBrowserRouter([
       {
         path: "/product",
         element: <ProductList />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
       },
     ],
   },
