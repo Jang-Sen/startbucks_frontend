@@ -12,12 +12,15 @@ const Main = () => {
               src="https://image.istarbucks.co.kr/common/img/main/rewards-logo.png"
               alt="Main Banner"
             />
-            <Card.ImgOverlay className="d-flex flex-column justify-content-center align-items-center">
+            <Card.ImgOverlay
+              className="d-flex flex-column justify-content-center align-items-center"
+              style={{ color: "black" }}
+            >
               <Card.Title className="display-4">
                 새로운 시즌 한정 메뉴
               </Card.Title>
               <Card.Text>따뜻한 커피와 함께하는 특별한 순간</Card.Text>
-              <Button to="/products" variant="success">
+              <Button href="/product" variant="success">
                 자세히 보기
               </Button>
             </Card.ImgOverlay>
@@ -32,7 +35,9 @@ const Main = () => {
             <Card.Body>
               <Card.Title>스타벅스 리워드</Card.Title>
               <Card.Text>별을 모아 혜택을 받으세요!</Card.Text>
-              <Button variant="success">가입하기</Button>
+              <Button href="/signup" variant="success">
+                가입하기
+              </Button>
             </Card.Body>
           </Card>
         </Col>
@@ -41,7 +46,7 @@ const Main = () => {
             <Card.Body>
               <Card.Title>한정 메뉴 출시</Card.Title>
               <Card.Text>새로운 시즌 메뉴를 만나보세요!</Card.Text>
-              <Button to="/products" variant="warning">
+              <Button href="/product" variant="warning">
                 자세히 보기
               </Button>
             </Card.Body>
