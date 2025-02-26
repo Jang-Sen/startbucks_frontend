@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Button, Container, Form } from "react-bootstrap";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   // Value
@@ -60,7 +60,6 @@ const Login = () => {
             required
           />
         </Form.Group>
-
         <Form.Group className="mb-3">
           <Form.Label>비밀번호</Form.Label>
           <Form.Control
@@ -71,10 +70,21 @@ const Login = () => {
             required
           />
         </Form.Group>
-
         <Button type="submit" variant="success" className="w-100">
           로그인
         </Button>
+        <p className="mt-2" style={{ color: "green", fontSize: "small" }}>
+          <strong>
+            * 타 사이트와 비밀번호를 동일하게 사용할 경우 도용의 위험이
+            있으므로, 정기적인 비밀번호 변경을 해주시길 바랍니다.
+          </strong>
+        </p>
+        <Link to="/signup" className="btn btn-link w-50 me-auto">
+          회원가입
+        </Link>
+        <Link to={"/find/password"} className="btn btn-link w-50 me-auto">
+          비밀번호 변경
+        </Link>
       </Form>
     </Container>
   );

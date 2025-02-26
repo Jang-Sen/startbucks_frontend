@@ -5,6 +5,8 @@ import Main from "./page/Main";
 import Error from "./page/Error";
 import Signup from "./page/Auth/Signup";
 import Login from "./page/Auth/Login";
+import FindPassword from "./page/Auth/FindPassword";
+import ChangePassword from "./page/Auth/ChangePassword";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/find/password",
+        element: <FindPassword />,
+      },
+      {
+        path: "/change/password",
+        element: <ChangePassword />,
       },
     ],
   },
