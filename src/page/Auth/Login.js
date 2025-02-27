@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Alert, Button, Container, Form } from "react-bootstrap";
+import { Alert, Button, Container, Form, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useLogin } from "../../hook/useAuthentication";
+import { socialMenus } from "../../common";
+import { useGoogleLogin } from "../../hook/useSocialLogin";
 
 const Login = () => {
   // Value
@@ -13,6 +15,12 @@ const Login = () => {
 
   // Mutation
   const loginMutation = useLogin();
+  const googleLoginMutation = useGoogleLogin();
+
+  // 소셜 로그인 핸들러
+  const socialLoginHandler = async () => {
+    googleLoginMutation.mutate();
+  };
 
   // 서브밋 핸들러
   const submitHandler = async (e) => {
@@ -79,6 +87,44 @@ const Login = () => {
           비밀번호 변경
         </Link>
       </Form>
+
+      <p
+        className="text-center mt-3"
+        style={{
+          fontSize: "small",
+          color: "GrayText",
+        }}
+      >
+        SNS 계정으로 간편 로그인/회원가입
+      </p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "5px",
+          margin: "15px 0",
+        }}
+      >
+        {socialMenus.map((menu, index) => (
+          <Button
+            key={menu.id}
+            onClick={() => socialLoginHandler(menu.name)}
+            style={{
+              border: "none",
+              background: "transparent",
+              marginBottom: "10px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+          >
+            <Image
+              src={menu.image}
+              alt={menu.name}
+              style={{ width: "100px", height: "50px" }}
+            />
+          </Button>
+        ))}
+      </div>
     </Container>
   );
 };

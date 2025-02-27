@@ -6,4 +6,22 @@ const agreementItems = [
   { key: "agreeOfEvent", label: "이벤트 알림 동의 (선택)" },
 ];
 
-export { agreementItems };
+const socialMenus = [
+  {
+    id: 1,
+    name: "google",
+    image: "/images/web_light_sq_SU@2x.png",
+  },
+  {
+    id: 2,
+    name: "naver",
+    image: "/images/btnG_축약형.png",
+  },
+  {
+    id: 3,
+    name: "kakao",
+    image: "/images/kakao_login_large.png",
+  },
+];
+
+export { agreementItems, socialMenus };

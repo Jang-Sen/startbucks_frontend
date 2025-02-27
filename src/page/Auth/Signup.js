@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import { Alert, Button, Container, Form, InputGroup } from "react-bootstrap";
-import { agreementItems } from "../../common";
+import {
+  Alert,
+  Button,
+  Container,
+  Form,
+  Image,
+  InputGroup,
+} from "react-bootstrap";
+import { agreementItems, socialMenus } from "../../common";
 import { useSignup } from "../../hook/useAuthentication";
 import { useCheckEmail, useSendEmail } from "../../hook/useVerification";
+import { useGoogleLogin } from "../../hook/useSocialLogin";
 
 const Signup = () => {
   // Value
@@ -23,8 +31,12 @@ const Signup = () => {
   const sendEmailMutation = useSendEmail();
   const checkEmailMutation = useCheckEmail();
 
+  const googleLoginMutation = useGoogleLogin();
+
   // 소셜 로그인 핸들러
-  const socialLoginHandler = async () => {};
+  const socialLoginHandler = async () => {
+    googleLoginMutation.mutate();
+  };
 
   // 약관 초기 상태 (전체 동의 포함)
   const initialAgreement = Object.fromEntries([
@@ -137,6 +149,44 @@ const Signup = () => {
   return (
     <Container className="mt-4" style={{ maxWidth: "400px" }}>
       <h2 className="text-center m-4">회원가입</h2>
+
+      <p
+        className="text-center"
+        style={{
+          fontSize: "small",
+          color: "GrayText",
+        }}
+      >
+        SNS 계정으로 간편하게 회원가입
+      </p>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          margin: "15px 0",
+        }}
+      >
+        {socialMenus.map((menu, index) => (
+          <Button
+            key={menu.id}
+            onClick={() => socialLoginHandler(menu.name)}
+            style={{
+              border: "none",
+              background: "transparent",
+              marginBottom: "10px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+          >
+            <Image
+              src={menu.image}
+              alt={menu.name}
+              style={{ width: "150px", height: "50px" }}
+            />
+          </Button>
+        ))}
+      </div>
 
       {error && <Alert variant="danger">{error}</Alert>}
 
