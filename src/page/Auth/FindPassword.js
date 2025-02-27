@@ -7,8 +7,7 @@ import {
   Image,
   InputGroup,
 } from "react-bootstrap";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useFindPassword } from "../../hook/useResetPassword";
 
 const FindPassword = () => {
   // Value
@@ -17,8 +16,8 @@ const FindPassword = () => {
   // Error
   const [error, setError] = useState(null);
 
-  // Navigate
-  const navigate = useNavigate();
+  // Mutation
+  const findPasswordMutation = useFindPassword();
 
   // Submit Handler
   const submitHandler = async (e) => {
@@ -26,21 +25,14 @@ const FindPassword = () => {
 
     setError(null);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:82/api/v1/auth/find/password",
-        { email },
-      );
-
-      console.log(response.data);
-
-      if (response.status === 201) {
-        navigate("/login");
-      }
-    } catch (err) {
-      setError(err.response.data.message);
-      console.error(err.response.data.message);
-    }
+    findPasswordMutation.mutate(
+      { email },
+      {
+        onError: (err) => {
+          setError("Find Password Error: " + err.response.data.message);
+        },
+      },
+    );
   };
 
   return (

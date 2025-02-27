@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Button, Container, Form } from "react-bootstrap";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useLogin } from "../../hook/useAuthentication";
 
 const Login = () => {
   // Value
@@ -11,8 +11,8 @@ const Login = () => {
   // Error Value
   const [error, setError] = useState(null);
 
-  // Navigate
-  const navigate = useNavigate();
+  // Mutation
+  const loginMutation = useLogin();
 
   // 서브밋 핸들러
   const submitHandler = async (e) => {
@@ -20,21 +20,14 @@ const Login = () => {
 
     setError(null);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:82/api/v1/auth/login",
-        {
-          email,
-          password,
+    loginMutation.mutate(
+      { email, password },
+      {
+        onError: (err) => {
+          setError("Login Error: " + err.response.data.message);
         },
-      );
-
-      console.log("Login Success: ", response.data);
-      navigate("/");
-    } catch (err) {
-      setError(err.response.data.message);
-      console.error("Submit Handler Error: ", err.response.data.message);
-    }
+      },
+    );
   };
 
   return (

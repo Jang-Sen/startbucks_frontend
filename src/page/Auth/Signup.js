@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Alert, Button, Container, Form, InputGroup } from "react-bootstrap";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { agreementItems } from "../../common";
+import { useSignup } from "../../hook/useAuthentication";
+import { useCheckEmail, useSendEmail } from "../../hook/useVerification";
 
 const Signup = () => {
   // Value
@@ -18,8 +18,10 @@ const Signup = () => {
   // Error Value
   const [error, setError] = useState(null);
 
-  // Navigate
-  const navigate = useNavigate();
+  // Mutation
+  const signupMutation = useSignup();
+  const sendEmailMutation = useSendEmail();
+  const checkEmailMutation = useCheckEmail();
 
   // 소셜 로그인 핸들러
   const socialLoginHandler = async () => {};
@@ -65,47 +67,40 @@ const Signup = () => {
   const sendEmailHandler = async () => {
     setError(null);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:82/api/v1/auth/email/send",
-        { email },
-      );
-
-      console.log(response.data);
-
-      if (response.status === 201) {
-        setSendEmail(true);
-      }
-    } catch (err) {
-      setSendEmail(false);
-      setError(err.response.data.message);
-      console.error("Send Email Handler Error: ", err.response.data.message);
-    }
+    sendEmailMutation.mutate(
+      { email },
+      {
+        onSuccess: (data) => {
+          if (data.statusCode === 201) {
+            setSendEmail(true);
+          }
+        },
+        onError: (err) => {
+          setSendEmail(false);
+          setError("Send Email Error: " + err.response.data.message);
+        },
+      },
+    );
   };
 
   // 이메일 체크 핸들러
   const checkEmailHandler = async () => {
     setError(null);
 
-    try {
-      const response = await axios.post(
-        "http://localhost:82/api/v1/auth/email/check",
-        {
-          email,
-          code,
+    checkEmailMutation.mutate(
+      { email, code },
+      {
+        onSuccess: (data) => {
+          if (data.statusCode === 201) {
+            setCheckEmail(true);
+          }
         },
-      );
-
-      console.log(response.data);
-
-      if (response.status === 201) {
-        setCheckEmail(true);
-      }
-    } catch (err) {
-      setCheckEmail(false);
-      setError(err.response.data.message);
-      console.error("Check Email Handler Error: ", err.response.data.message);
-    }
+        onError: (err) => {
+          setCheckEmail(false);
+          setError("Check Email Error: " + err.response.data.message);
+        },
+      },
+    );
   };
 
   // 서브밋 핸들러
@@ -132,21 +127,11 @@ const Signup = () => {
       return;
     }
 
-    try {
-      const response = await axios.post(
-        "http://localhost:82/api/v1/auth/signup",
-        user,
-      );
-
-      console.log("Signup Success: ", response.data);
-
-      if (response.status === 201) {
-        navigate("/login");
-      }
-    } catch (err) {
-      setError(err.response.data.message);
-      console.error("Submit Handler Error: ", err.response.data.message);
-    }
+    signupMutation.mutate(user, {
+      onError: (err) => {
+        setError("Signup Error: " + err.response.data.message);
+      },
+    });
   };
 
   return (

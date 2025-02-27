@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Button, Container, Form, Image } from "react-bootstrap";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import axios from "axios";
+import { useSearchParams } from "react-router-dom";
+import { useChangePassword } from "../../hook/useResetPassword";
 
 const ChangePassword = () => {
   // Value
@@ -13,8 +13,8 @@ const ChangePassword = () => {
   // Error
   const [error, setError] = useState(null);
 
-  // Navigate
-  const navigate = useNavigate();
+  // Mutation
+  const changePasswordMutation = useChangePassword();
 
   // Submit Handler
   const submitHandler = async (e) => {
@@ -27,24 +27,14 @@ const ChangePassword = () => {
       return;
     }
 
-    try {
-      const response = await axios.post(
-        "http://localhost:82/api/v1/auth/change/password",
-        {
-          token,
-          newPassword: password,
+    changePasswordMutation.mutate(
+      { token, password },
+      {
+        onError: () => {
+          setError("Change Password Error: " + error.response.data.message);
         },
-      );
-
-      console.log(response.data);
-
-      if (response.status === 201) {
-        navigate("/login");
-      }
-    } catch (err) {
-      setError(err.response.data.message);
-      console.error(err.response.data.message);
-    }
+      },
+    );
   };
 
   return (
